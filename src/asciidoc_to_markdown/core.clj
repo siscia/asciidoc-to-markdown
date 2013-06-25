@@ -33,6 +33,13 @@
                           #".*(Author|Email|Date|Revision):(.*)"
                           ""))
 
+(defn to-html-comment [text & jekyll]
+  (clojure.string/replace text
+                          #"////(?s:(.*?))////"
+                          (if (first jekyll)
+                            ""
+                            "<--- $1 -->")))
+
 (defn -main [input output & args]
   (let [[args opts banner]
         (cli args
@@ -44,4 +51,5 @@
                      title
                      inline-code
                      meta-info
+                     (to-html-comment (:jekyll args))
                      ))))
